@@ -2,7 +2,7 @@
 
 Following along with https://youtu.be/e-E0UB-YDRk
 
-# vue_basic_1
+# vue_cdn
 
 - use Vue using CDN (very simple), no npm needed!
 
