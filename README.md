@@ -123,23 +123,23 @@ export default {
 
 vue directives list:
 
-| directive | details                                                  |
-| --------- | -------------------------------------------------------- |
-| v-if      | n/a                                                      |
-| v-else    | used together with `v-if`                                |
-| v-else-if | used together with `v-if`                                |
-| v-show    | hides element, but keeps element in DOM                  |
-| v-for     | n/a                                                      |
-| v-slot    | n/a                                                      |
-| v-text    | n/a                                                      |
-| v-html    | dangerous, try not to use this if you can avoid it       |
-| v-on      | n/a                                                      |
-| v-bind    | n/a                                                      |
-| v-model   | n/a                                                      |
-| v-pre     | n/a                                                      |
-| v-cloak   | n/a                                                      |
-| v-once    | only update element once useful with `setInterval`, etc. |
-| v-is      | n/a                                                      |
+| directive | details                                                  | covered by          |
+| --------- | -------------------------------------------------------- | ------------------- |
+| v-if      | n/a                                                      | end of app1         |
+| v-else    | used together with `v-if`                                | end of app1         |
+| v-else-if | used together with `v-if`                                | end of app1         |
+| v-show    | hides element, but keeps element in DOM                  | end of app1         |
+| v-for     | n/a                                                      | end of app1         |
+| v-slot    | n/a                                                      |                     |
+| v-text    | n/a                                                      | end of app1         |
+| v-html    | dangerous, try not to use this if you can avoid it       | end of app1         |
+| v-on      | n/a                                                      | end of app1         |
+| v-bind    | n/a                                                      | end of app1         |
+| v-model   | n/a                                                      | end of app1         |
+| v-pre     | n/a                                                      |                     |
+| v-cloak   | n/a                                                      |                     |
+| v-once    | only update element once useful with `setInterval`, etc. | end of app1         |
+| v-is      | n/a                                                      |                     |
 
 a `v-for` example:
 
