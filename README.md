@@ -2,167 +2,330 @@
 
 Following along with https://youtu.be/e-E0UB-YDRk
 
-# vue_cli
+# vue_cli - app 1 (DC Heroes)
 
-- use Vue using CLI
+Note: this app is similar to the angular tour of heroes tutorial app.
 
-```bash
-# use Vue3 Preview (as of Jan 31, 2021)
-vue create vue3
-cd vue3
-npm run serve
-```
-
-NOTE: it is best to open the `vue3` folder with vscode, not the root of our github repo.
-
-compared to vue_cdn, we now have `App.vue`.
-
-Before we had
-
-```js
-App = { template, data };
-
-createApp(App).mount("#app");
-```
-
-but now we have:
-
-```js
-import App from "./App.vue";
-
-createApp(App).mount("#app");
-```
-
-Then in `App.vue`, removing everything and put
+info on `v-bind`:
 
 ```vue
 <template>
-  <h1>Hey Vue3 from cli</h1>
+  <input v-bind:value="newHero.name" />
 </template>
-```
 
-folder overview:
-
-- `package.json`:
-
-  - dependencies: `vue`, `eslinst`
-  - scripts: `serve`, `build`
-
-- `src`:
-  - this is where the code goes
-
-tools:
-
-- at this point we should install the vue3 dev tools extension.
-- also cool is the `vue ui` command.
-- also cool is the `vetur` vscode extension.
-- note: the auto hot reload is truly amazing. it just works.
-
-useful things to know for templates:
-
-```js
+<script>
 export default {
   data() {
     return {
-      title: "<h1>Hey Vue 3</h1>",
+      newHero: { name: "Aquaman" },
     };
-  },
-};
-```
-
-we would need to do:
-
-```html
-<template>
-  <div v-html="title">{{ title }}</div>
-</template>
-```
-
-this is known as a _vue directive_. Note that `v-html` is general considered a bad practice.
-
-`v-if` is another useful directive:
-
-```vue
-<template>
-  <div v-if="showTitle">{{ title }}</div>
-</template>
-```
-
-`v-show` is another useful directive:
-
-```vue
-<template>
-  <div v-show="showTitle">{{ title }}</div>
-</template>
-```
-
-note that with `v-show`, the element is just hidden (it's still in the DOM). with `v-if`, it will not be in DOM.
-
-`mounted` events are very cool. for example:
-
-```vue
-<script>
-// assume we have ``count`` variable in data
-export default {
-  mounted() {
-    setInterval(() => {
-      this.count++;
-    }, 1000);
   },
 };
 </script>
 ```
 
-`v-text` is another useful directive.
+disabling a html button
 
 ```vue
 <template>
-  <div v-text="count"></div>
-</tempate>
+  <button disabled>Add Hero</button>
+</template>
 ```
 
-vue directives list:
+but we can actually use `v-bind` for this.
 
-| directive | details                                                  |
-| --------- | -------------------------------------------------------- |
-| v-if      | n/a                                                      |
-| v-else    | used together with `v-if`                                |
-| v-else-if | used together with `v-if`                                |
-| v-show    | hides element, but keeps element in DOM                  |
-| v-for     | n/a                                                      |
-| v-slot    | n/a                                                      |
-| v-text    | n/a                                                      |
-| v-html    | dangerous, try not to use this if you can avoid it       |
-| v-on      | n/a                                                      |
-| v-bind    | n/a                                                      |
-| v-model   | n/a                                                      |
-| v-pre     | n/a                                                      |
-| v-cloak   | n/a                                                      |
-| v-once    | only update element once useful with `setInterval`, etc. |
-| v-is      | n/a                                                      |
-
-a `v-for` example:
-
-```html
-<ul>
-  <li v-for="num in 10" v-bind:key="num">{{ num }}</li>
-</ul>
+```vue
+<template>
+  <button v-bind:disabled="isDisabled">Add Hero</button>
+</template>
 ```
 
-another `v-for` example:
+there is actually a shorter syntax for `v-bind`, shown below.
 
-```html
-<ul>
-  <li v-for="(value, key) in heroes" v-bind:key="key">{{ value.name }}</li>
-</ul>
+```vue
+<template>
+  <button :disabled="isDisabled">Add Hero</button>
+</template>
 ```
 
-javascript also has an `enumerate`:
+we can also do dynamic bindings:
+
+```vue
+<template>
+  <!-- in data, attribute: "disabled" -->
+  <button :[attribute]="isDisabled">Add Hero</button>
+</template>
+```
+
+`v-model` is also useful. it will automatically update the object in the javascript code. you can use the dev tools to see this.
+
+![](https://i.ibb.co/8m8mNvM/screenshot.png)
+
+```vue
+<template>
+  <!-- previously we had <input :value="newHero.name"> 
+note that newHero should be a string object here
+-->
+  <input v-model="newHero" />
+</template>
+```
+
+some `v-model` tricks.
+
+- trimming white space with `v-model.trim`, i.e. <input v-model.trim="newHero">
+- only modifying data after unfocusing on a field with `v.model.lazy`, i.e. <input v-model.lazy="newHero">
+
+it is useful with `textarea`, where user is going to keep focused on the textarea for a while. then only run javascript when they leave the textarea. much more efficient.
+
+```vue
+<template><textarea v-model.lazy="newHero" /><br /></template>
+```
+
+for event handlers, use `v-on`. simple as that. with vanilla javascript we would do:
 
 ```html
-<ul>
-  <li v-for="(hero, index) in heroes" v-bind:key="hero">
-    {{ index }} {{ hero.name }}
-  </li>
-</ul>
+<button onclick="alert('clicked button')">My Button</button><br />
+```
+
+in vue we would do:
+
+```html
+<!-- note there is no function called ``alert`` in view -->
+<button v-on:click="alert('heyy')">My Button</button><br />
+```
+
+but since there is no alert functioion defined, we should do something like this instead.
+
+```html
+<!-- note there is no function called ``alert`` in view -->
+<button v-on:click="newHero = 'Wonder Woman'">Add Hero</button><br />
+```
+
+but with vue magic (similar to `:` instead of `v-bind`) we can do `@` instead of `v-on`:
+
+```html
+<button @click="newHero = 'Wonder Woman'">Add Hero</button><br />
+```
+
+some other common events would be:
+
+- `@keydown`
+- etc.
+
+let's get to forms:
+
+```html
+<form>
+  <input v-model="newHero" />
+  <button type="submit">Add Hero</button>
+</form>
+```
+
+and with `v-on` we can do:
+
+```html
+<form @submit="newHero = 'Wonder Woman'">
+  <input v-model="newHero" />
+  <button type="submit">Add Hero</button>
+</form>
+```
+
+but we need to prevent submission with `@submit.prevent` which prevents the default submit action.
+
+```html
+<form @submit.prevent="newHero = 'Wonder Woman'">
+  <input v-model="newHero" />
+  <button type="submit">Add Hero</button>
+</form>
+```
+
+if we want to execute a function on button click, we need a method. like this:
+
+<!-- note: at this point it may make sense to think of a component as a class -->
+
+```html
+<form @submit.prevent="dcHeroes.push({'name': newHero})">
+  <input v-model="newHero" />
+  <button type="submit">Add Hero</button>
+</form>
+```
+
+we can the code `dcHeroes.push({'name': newHero})` into the methods. Note that functions in methods cannot be arrow functions since they need the `this` keyword. for example:
+
+```vue
+<script>
+export default {
+  methods: {
+    addHero() {
+      // NOTE: need to use this to access data
+      this.dcHeroes.push({ name: this.newHero });
+      this.newHero = "";
+    },
+  },
+};
+</script>
+```
+
+and to call the function:
+
+```vue
+<template>
+<form @submit.prevent="addHero">
+  <input v-model="newHero" placeholder="Type Hero Name Here"/>
+  <button type="submit">Add Hero</button>
+</form>
+</template>
+```
+
+more background knowledge. first, computed properties. computed properties is in between data and methods. computed properties run when dependency changes. are cached. used as property in place of data. by defaults only have getters. we can also define setters.
+
+second, methods. run when update occurs. not cached. invoked on ``v-on`` or events. have getters and setters.
+
+```vue
+<template>
+<!-- this works -->
+<h1>DC Heroes {{ dcHeroes.length }}</h1>
+</template>
+```
+
+but we can also do this.
+
+```vue
+<template>
+<h1>DC Heroes {{ heroesCount }}</h1>
+</template>
+```
+
+but then we need a computed property which is basically ``heroesCount = dcHeroes.length``. we can do this as follows.
+
+```vue
+<script>
+export default {
+  computed: {
+    heroesCount() {
+      return this.dcHeroes.length;
+    }
+  }
+}
+</script>
+```
+
+and then we can do this in the template and it will update whenever any of the computed properties change.
+
+```vue
+<template>
+<h1>DC Heroes ({{ heroesCount }})</h1>
+</template>
+```
+
+you can think of computed property as a static variable.
+
+next, we will look at getters and setters for vue. we can do this.
+
+```vue
+<script>
+export default {
+  data() {
+    return {
+      firstName: "Nathan",
+      lastName: "Esau"
+    }
+  },
+  computed: {
+    fullname: {
+      get() {
+        return `${this.firstName} ${this.lastName}`
+      },
+      set(fullName) {
+        const values = fullName.split(" ");
+        this.firstName = values[0];
+        this.lastName = values[1];
+      }
+    }
+  }
+}
+</script>
+```
+
+Now whenever in code someone does ``this.fullName = "My Name"`` then we will automatically update ``firstName`` and ``lastName``.
+
+For example:
+
+```vue
+<template>
+  <p>About this site</p>
+  <ul>
+    <!-- setFullname method will be called on button click -->
+    <!-- fullName will be updated from fullname.get method -->
+    <li>Made by {{ fullName }} <span><button @click="setFullName">Change</button></span></li>
+  </ul>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      firstName: "Nathan",
+      lastName: "Esau"
+    }
+  },
+  methods: {
+    setFullName() {
+      // fullname.set will get called here
+      this.fullName = 'Full Name';
+    }
+  },
+  computed: {
+    fullname: {
+      get() {
+        return `${this.firstName} ${this.lastName}`
+      },
+      set(fullName) {
+        const values = fullName.split(" ");
+        this.firstName = values[0];
+        this.lastName = values[1];
+      }
+    }
+  }
+}
+</script>
+```
+
+aside. here is some code for only adding a valid hero.
+
+```vue
+<template>
+<form @submit.prevent="addHero">
+  <input v-model="newHero" placeholder="Type Hero Name Here"/>
+  <button type="submit">Add Hero</button>
+</form>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      newHero: "",
+      dcHeroes: [
+        {name: 'SuperGirl'},
+        {name: 'Flash'},
+        {name: 'Arrow'},
+        {name: 'Batman'},
+        {name: 'Superman'}
+      ],
+      validHeros: new Set(['Aquaman', 'Wonder Woman'])
+    }
+  },
+  methods: {
+    addHero() {
+      // only Aquaman and Wonder Woman can be added.
+      if (!this.validHeros.has(this.newHero)) {
+        return;
+      }
+      this.dcHeroes.push({'name': this.newHero});
+      this.newHero = '';
+    }
+  }
+}
+</script>
 ```
